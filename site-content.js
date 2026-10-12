@@ -1,4 +1,4 @@
-/* Blog 与 Project 从统一内容文件 paper-data.js 渲染。 */
+/* Blog、Project 与 Horizon 从统一内容文件 paper-data.js 渲染。 */
 (() => {
   'use strict';
   const content = window.LUMIPULSE_PAPER_LIBRARY;
@@ -89,6 +89,69 @@
 
     draw();
   }
+
+
+  function renderHorizon() {
+    const target = document.querySelector('#horizon .horizon-grid');
+    if (!target) return;
+    const items = Array.isArray(content.horizon) ? content.horizon : [];
+    const presets = ['公开课', '播客', '访谈'];
+    const categoryOf = item => String(item.category || '其他').trim() || '其他';
+    const categories = [...new Set([...presets, ...items.map(categoryOf)])];
+    const filters = text('div', 'collection-filters', '');
+    filters.setAttribute('role', 'group');
+    filters.setAttribute('aria-label', '选择 Horizon 分类');
+    const state = text('p', 'collection-state', '');
+    target.id = 'horizonGrid';
+    target.before(filters, state);
+    let selected = null;
+    function draw() {
+      filters.replaceChildren();
+      categories.forEach((category, index) => {
+        const visible = items.filter(item => categoryOf(item) === category);
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.className = 'collection-filter';
+        button.setAttribute('aria-pressed', String(selected === category));
+        button.setAttribute('aria-expanded', String(selected === category));
+        button.setAttribute('aria-controls', target.id);
+        button.append(text('span', 'collection-filter-number', String(index + 1).padStart(2, '0')),
+          text('span', 'collection-filter-name', category), text('span', 'collection-filter-count', `${visible.length} 项`));
+        button.addEventListener('click', () => { selected = selected === category ? null : category; draw(); });
+        filters.append(button);
+      });
+      target.replaceChildren();
+      target.hidden = selected === null;
+      state.textContent = selected ? `${selected} · 再次点击这个分类即可收起。` : '选择一种资料，展开学习记录。';
+      if (!selected) return;
+      const visible = items.filter(item => categoryOf(item) === selected);
+      if (!visible.length) { target.append(text('div', 'paper-empty', '这里还没有学习记录。')); return; }
+      visible.forEach((item, index) => {
+        const entry = document.createElement('details');
+        entry.className = 'paper-note-card';
+        const trigger = document.createElement('summary');
+        trigger.className = 'paper-note-trigger';
+        trigger.append(text('div', 'paper-note-meta', [item.creator, item.date, item.category].filter(Boolean).join(' · ')),
+          text('h3', '', item.title), text('p', 'paper-question-preview', item.summary || ''),
+          text('span', 'paper-expand-label', '展开关键内容与心得 ↓'));
+        const notes = text('div', 'paper-note-details', '');
+        if (item.url) {
+          const link = text('a', 'text-link', '打开原始资料 ↗');
+          link.href = item.url; link.target = '_blank'; link.rel = 'noopener noreferrer'; notes.append(link);
+        }
+        [['关键内容', item.keyPoints], ['值得回看的片段', item.timestamps], ['我的心得', item.reflection], ['下一步', item.nextStep]].forEach(([label, value]) => {
+          if (!value) return;
+          const block = text('section', 'paper-note-block', '');
+          const paragraph = text('p', '', Array.isArray(value) ? value.join('\n') : value);
+          paragraph.style.whiteSpace = 'pre-line';
+          block.append(text('h4', '', label), paragraph); notes.append(block);
+        });
+        entry.append(trigger, notes); target.append(entry);
+      });
+    }
+    draw();
+  }
+  renderHorizon();
 
   render('#blog .blog-grid', content.blogs, 'blog');
   render('#project .content-grid', content.projects, 'project');
