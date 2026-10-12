@@ -3,6 +3,8 @@ name: Deploy LumiPulse
 on:
   push:
     branches: [main]
+  pull_request:
+    branches: [main]
   workflow_dispatch:
 
 permissions:
@@ -15,7 +17,45 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  validate:
+    name: Validate content
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+      - name: Check JavaScript syntax
+        run: node --check paper-data.js && node --check paper.js && node --check site-content.js
+      - name: Check content identifiers
+        run: |
+          node <<'NODE'
+          const fs = require('fs');
+          const vm = require('vm');
+          const source = fs.readFileSync('paper-data.js', 'utf8');
+          const context = { window: {} };
+          vm.createContext(context);
+          vm.runInContext(source, context);
+          const data = context.window.LUMIPULSE_PAPER_LIBRARY;
+          if (!data) throw new Error('LUMIPULSE_PAPER_LIBRARY was not created');
+
+          for (const [name, entries] of Object.entries(data)) {
+            if (!Array.isArray(entries)) throw new Error(`${name} must be an array`);
+            const ids = entries.map((entry) => entry.id).filter(Boolean);
+            const duplicates = ids.filter((id, index) => ids.indexOf(id) !== index);
+            if (duplicates.length) throw new Error(`${name} has duplicate ids: ${[...new Set(duplicates)].join(', ')}`);
+          }
+
+          const domainIds = new Set(data.domains.map((domain) => domain.id));
+          const missingDomains = data.papers
+            .map((paper) => paper.domain)
+            .filter((domain) => domain && !domainIds.has(domain));
+          if (missingDomains.length) {
+            throw new Error(`papers reference missing domains: ${[...new Set(missingDomains)].join(', ')}`);
+          }
+          NODE
+
   deploy:
+    if: github.event_name != 'pull_request'
+    needs: validate
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
