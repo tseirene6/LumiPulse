@@ -344,7 +344,8 @@ window.LUMIPULSE_PAPER_LIBRARY = {
       "title": "What should a game world model remember?",
       "summary": "值得回看：世界模型的关键不只是生成下一帧，而是让规则、对象、资源、事件与长期后果在行动后仍可查询、验证并用于规划。",
       "url": "blog/game-world-models.html",
-      "action": "阅读笔记"
+      "action": "阅读笔记",
+      "category": "world-model"
     }
   ],
   "projects": [
@@ -357,5 +358,62 @@ window.LUMIPULSE_PAPER_LIBRARY = {
       "action": "等待下一篇"
     }
   ],
-  "horizon": []
+  "horizon": [],
+  "blogCategories": [
+    {
+      "id": "multimodal-model",
+      "name": "多模态模型",
+      "caption": "Multimodal Model"
+    },
+    {
+      "id": "visual-generation",
+      "name": "视觉生成",
+      "caption": "Visual Generation"
+    },
+    {
+      "id": "world-model",
+      "name": "世界模型",
+      "caption": "World Model"
+    },
+    {
+      "id": "ai-agents",
+      "name": "AI 智能体",
+      "caption": "AI Agents"
+    },
+    {
+      "id": "llm-mllm",
+      "name": "大语言模型与多模态大语言模型",
+      "caption": "LLM & MLLM"
+    },
+    {
+      "id": "foundation-model",
+      "name": "基础模型",
+      "caption": "Foundation Model"
+    },
+    {
+      "id": "efficient-ai",
+      "name": "高效 AI",
+      "caption": "Efficient AI"
+    },
+    {
+      "id": "trustworthy-ai",
+      "name": "可信 AI",
+      "caption": "Trustworthy AI"
+    },
+    {
+      "id": "research-craft",
+      "name": "科研实践",
+      "caption": "Research Craft"
+    },
+    {
+      "id": "frontier",
+      "name": "前沿探索",
+      "caption": "Frontier"
+    },
+    {
+      "id": "how-to-research",
+      "name": "研究方法",
+      "caption": "How to Research"
+    }
+  ]
 };
