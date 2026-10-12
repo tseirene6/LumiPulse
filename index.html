@@ -78,8 +78,8 @@
     const brandFlight=document.querySelector('#brandFlight');const flightBird=document.querySelector('#flightBird');const heroArt=document.querySelector('.hero-art');let birdAnimation;
     brandFlight.addEventListener('click',()=>{if(birdAnimation)return;const start=brandFlight.getBoundingClientRect();const target=heroArt.getBoundingClientRect();const birdWidth=66;const birdHeight=24;const startX=start.left+start.width/2-birdWidth/2;const startY=start.top+start.height/2-birdHeight/2;const endX=target.left+target.width*.76-birdWidth/2;const endY=target.top+target.height*.59-birdHeight/2;const dx=endX-startX;const dy=endY-startY;const reduced=window.matchMedia('(prefers-reduced-motion: reduce)').matches;brandFlight.classList.add('is-flying');flightBird.style.left=`${startX}px`;flightBird.style.top=`${startY}px`;birdAnimation=flightBird.animate(reduced?[{opacity:0,transform:'scale(.7)'},{opacity:1,transform:'scale(1)'},{opacity:0,transform:`translate(${dx}px,${dy}px) scale(.45)`}]:[{offset:0,opacity:0,transform:'translate(0,0) rotate(-8deg) scale(.62)'},{offset:.1,opacity:1,transform:'translate(0,0) rotate(-8deg) scale(.9)'},{offset:.42,opacity:1,transform:`translate(${dx*.38}px,${dy*.12-42}px) rotate(-2deg) scale(.86)`},{offset:.76,opacity:.92,transform:`translate(${dx*.76}px,${dy*.58-32}px) rotate(5deg) scale(.68)`},{offset:1,opacity:0,transform:`translate(${dx}px,${dy}px) rotate(9deg) scale(.38)`}],{duration:reduced?500:2400,easing:'cubic-bezier(.35,.04,.18,1)',fill:'forwards'});birdAnimation.finished.finally(()=>{birdAnimation=null;flightBird.getAnimations().forEach(animation=>animation.cancel());brandFlight.classList.remove('is-flying')})});
   </script>
-  <script src="paper-data.js"></script>
-  <script src="paper.js"></script>
-  <script src="site-content.js"></script>
+  <script src="paper-data.js?v=460cdcc9dea2"></script>
+  <script src="paper.js?v=cacc667f077e"></script>
+  <script src="site-content.js?v=7d71761433a7"></script>
 </body>
 </html>
