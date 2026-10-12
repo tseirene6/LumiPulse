@@ -5,6 +5,7 @@ LumiPulse 是一个持续生长的个人网站。记录可能没有那么“自�
 - **Paper**：按照研究领域收藏与解读论文。
 - **Blog**：收藏读过并值得回看的文章，附上阅读备注。
 - **Project**：记录每天动手做的小项目。
+- **Horizon**：收藏公开课、播客与访谈，记录关键内容、片段与学习心得。
 
 网站地址：<https://tseirene6.github.io/LumiPulse/>
 
@@ -19,6 +20,7 @@ LumiPulse 是一个持续生长的个人网站。记录可能没有那么“自�
    - `papers`：Paper 卡片。
    - `blogs`：Blog 卡片。
    - `projects`：Project 卡片。
+   - `horizon`：公开课、播客与访谈的学习记录。
 4. 复制同类条目，修改其中的字段，并确保相邻条目之间保留英文逗号。
 5. 点击 **Commit changes…**，选择 **Create a new branch for this commit and start a pull request**。
 6. 创建 Pull Request，等待 **Validate content** 检查通过，再合并到 `main`。

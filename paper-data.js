@@ -356,5 +356,6 @@ window.LUMIPULSE_PAPER_LIBRARY = {
       "url": "",
       "action": "等待下一篇"
     }
-  ]
+  ],
+  "horizon": []
 };
