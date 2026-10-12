@@ -34,13 +34,15 @@
       const count = papers.filter(paper => paper.domain === domain.id).length;
       const button = document.createElement('button');
       button.type = 'button';
-      button.className = 'domain-card';
+      const primary = domain.readingGroup === 'primary';
+      button.className = `domain-card ${primary ? 'domain-primary' : 'domain-explore'}`;
       button.setAttribute('aria-pressed', String(selected === domain.id));
       button.setAttribute('aria-controls', 'paperGrid');
-      button.append(textElement('span', 'domain-number', String(index + 1).padStart(2, '0')));
+      button.setAttribute('aria-expanded', String(selected === domain.id));
+      button.append(textElement('span', 'domain-number', `${String(index + 1).padStart(2, '0')} / ${primary ? '主要兴趣' : '拓展阅读'}`));
       button.append(textElement('span', 'domain-name', domain.name));
       button.append(textElement('span', 'domain-caption', domain.caption));
-      button.append(textElement('span', 'domain-count', `${count} 篇`));
+      button.append(textElement('span', 'domain-count', `${count} 篇${selected === domain.id ? ' · 已展开' : ''}`));
       button.addEventListener('click', () => {
         selected = selected === domain.id ? null : domain.id;
         selectedTopic = 'all';
