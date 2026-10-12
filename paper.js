@@ -16,7 +16,7 @@
   const papers = Array.isArray(library.papers)
     ? library.papers.filter(item => item && typeof item.title === 'string' && domainIds.has(item.domain))
     : [];
-  let selected = 'all';
+  let selected = null;
   let selectedTopic = 'all';
   let expandedPaper = null;
 
@@ -29,20 +29,20 @@
 
   function renderDomains() {
     domains.replaceChildren();
-    const choices = [{ id: 'all', name: '全部领域', caption: 'ALL FIELDS', description: '沿着问题与兴趣浏览收录的论文。' }, ...safeDomains];
+    const choices = safeDomains;
     choices.forEach((domain, index) => {
-      const count = domain.id === 'all' ? papers.length : papers.filter(paper => paper.domain === domain.id).length;
+      const count = papers.filter(paper => paper.domain === domain.id).length;
       const button = document.createElement('button');
       button.type = 'button';
       button.className = 'domain-card';
       button.setAttribute('aria-pressed', String(selected === domain.id));
       button.setAttribute('aria-controls', 'paperGrid');
-      button.append(textElement('span', 'domain-number', String(index).padStart(2, '0')));
+      button.append(textElement('span', 'domain-number', String(index + 1).padStart(2, '0')));
       button.append(textElement('span', 'domain-name', domain.name));
       button.append(textElement('span', 'domain-caption', domain.caption));
       button.append(textElement('span', 'domain-count', `${count} 篇`));
       button.addEventListener('click', () => {
-        selected = domain.id;
+        selected = selected === domain.id ? null : domain.id;
         selectedTopic = 'all';
         expandedPaper = null;
         render();
@@ -153,14 +153,18 @@
   function renderPapers() {
     grid.replaceChildren();
     const domain = safeDomains.find(item => item.id === selected);
-    heading.textContent = domain ? domain.name : '全部论文';
+    heading.textContent = domain ? domain.name : '选择一个领域';
+    if (!domain) {
+      description.textContent = '点击上方领域查看对应论文；再次点击同一领域即可收起。';
+      return;
+    }
     const topic = Array.isArray(domain?.topics) ? domain.topics.find(item => item.id === selectedTopic) : null;
-    const visible = papers.filter(item => (selected === 'all' || item.domain === selected) && (selectedTopic === 'all' || item.topic === selectedTopic));
+    const visible = papers.filter(item => item.domain === selected && (selectedTopic === 'all' || item.topic === selectedTopic));
     description.textContent = topic
       ? `${topic.name} · 已收录 ${visible.length} 篇，点击卡片展开阅读摘要。`
       : domain
         ? `${domain.description} 已收录 ${visible.length} 篇。`
-        : `已收录 ${papers.length} 篇论文。点击卡片展开研究问题、方法、实验与阅读备注。`;
+        : '点击上方领域查看对应论文；再次点击同一领域即可收起。';
 
     if (!visible.length) {
       grid.append(textElement('div', 'paper-empty', '这个领域的阅读清单还在生长。'));
