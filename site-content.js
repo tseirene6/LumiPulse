@@ -47,7 +47,7 @@
     target.before(filters, state);
     target.replaceChildren();
 
-    if (!items.length) {
+    if (!items.length && kind !== 'blog') {
       target.hidden = false;
       const empty = text('div', 'paper-empty', kind === 'blog' ? 'Blog 清单还在生长。' : 'Project 清单还在生长。');
       target.append(empty);
@@ -56,7 +56,12 @@
 
     const fallback = kind === 'blog' ? '未分类 Blog' : '未分类 Project';
     const categoryOf = item => String(item.category || item.meta || fallback).trim() || fallback;
-    const categories = [...new Set(items.map(categoryOf))];
+    const presetCategories = kind === 'blog' && Array.isArray(content.blogCategories) ? content.blogCategories : [];
+    const categories = [...new Set([...presetCategories.map(category => category.id), ...items.map(categoryOf)])];
+    const categoryLabel = category => {
+      const preset = presetCategories.find(item => item.id === category);
+      return preset ? `${preset.name} / ${preset.caption}` : category;
+    };
     let selected = null;
 
     function draw() {
@@ -68,8 +73,12 @@
         button.className = 'collection-filter';
         button.setAttribute('aria-pressed', String(selected === category));
         button.setAttribute('aria-controls', target.id);
+        button.setAttribute('aria-expanded', String(selected === category));
         button.append(text('span', 'collection-filter-number', String(index + 1).padStart(2, '0')));
-        button.append(text('span', 'collection-filter-name', category));
+        const preset = presetCategories.find(item => item.id === category);
+        const label = text('span', 'collection-filter-name', preset ? preset.name : category);
+        if (preset) label.append(text('span', 'collection-filter-caption', preset.caption));
+        button.append(label);
         button.append(text('span', 'collection-filter-count', `${count} 项`));
         button.addEventListener('click', () => {
           selected = selected === category ? null : category;
@@ -81,10 +90,12 @@
       target.replaceChildren();
       target.hidden = selected === null;
       state.textContent = selected
-        ? `${selected} · 再次点击这个分类即可收起。`
+        ? `${categoryLabel(selected)} · 再次点击这个分类即可收起。`
         : `选择一个${kind === 'blog' ? ' Blog' : ' Project'} 分类查看内容。`;
       if (!selected) return;
-      items.filter(item => categoryOf(item) === selected).forEach((item, index) => target.append(card(item, index, kind)));
+      const visible = items.filter(item => categoryOf(item) === selected);
+      if (!visible.length) { target.append(text('div', 'paper-empty', '这个领域的 Blog 收藏还在生长。')); return; }
+      visible.forEach((item, index) => target.append(card(item, index, kind)));
     }
 
     draw();
