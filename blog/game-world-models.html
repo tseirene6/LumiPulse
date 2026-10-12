@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#002fa7">
+  <meta name="description" content="从 SIMA 2 与 Programmable World Model 出发，讨论游戏世界模型的输出、评测与研究问题。">
+  <title>游戏世界模型究竟应该输出什么？ · LumiPulse</title>
+  <style>
+    :root{--blue:#002fa7;--ink:#14234b;--muted:#66728c;--line:#dce4f7;--paper:#f7f9ff;--white:#fff;--serif:Georgia,"Noto Serif SC","Songti SC",serif;--sans:Inter,"Noto Sans SC","Microsoft YaHei",sans-serif}
+    *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;color:var(--ink);background:var(--white);font-family:var(--sans);-webkit-font-smoothing:antialiased}a{color:inherit}img{display:block;max-width:100%}::selection{background:#c8d5ff;color:var(--blue)}:focus-visible{outline:3px solid #7195ff;outline-offset:4px}
+    .wrap{width:min(1040px,calc(100% - 48px));margin-inline:auto}.topbar{height:74px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--line)}.brand{text-decoration:none;color:var(--blue);font:20px/1 var(--serif);letter-spacing:.12em}.back{font-size:12px;color:var(--blue);text-underline-offset:4px}.hero{padding:92px 0 55px}.eyebrow{color:var(--blue);font-size:11px;font-weight:700;letter-spacing:.2em;text-transform:uppercase}.hero h1{max-width:900px;margin:24px 0 22px;font:normal clamp(45px,7vw,78px)/1.12 var(--serif);letter-spacing:-.065em}.dek{max-width:790px;margin:0;color:var(--muted);font:normal clamp(18px,2.1vw,24px)/1.75 var(--serif)}.meta{display:flex;flex-wrap:wrap;gap:18px;margin-top:34px;color:var(--muted);font-size:12px}.meta a{color:var(--blue);text-underline-offset:4px}
+    figure{margin:0 0 70px}.figure-frame{border:1px solid var(--line);background:var(--paper);padding:12px}.figure-frame img{width:100%;height:auto}.caption{margin:12px 2px 0;color:var(--muted);font-size:11px;line-height:1.7}.caption a{color:var(--blue)}
+    article{width:min(790px,100%);margin-inline:auto;padding-bottom:100px}article h2{margin:72px 0 20px;font:normal clamp(31px,4vw,45px)/1.2 var(--serif);letter-spacing:-.04em}article h3{margin:35px 0 12px;font:normal 24px/1.35 var(--serif)}article p,article li{font-size:16px;line-height:2;color:#34415f}article strong{color:var(--ink)}article a{color:var(--blue);text-underline-offset:4px}.lead{font:normal 23px/1.75 var(--serif);color:var(--ink);border-left:3px solid var(--blue);padding-left:24px;margin:0 0 42px}.note{background:var(--paper);border:1px solid var(--line);padding:24px 26px;margin:34px 0}.note p{margin:0}.question{font:normal 25px/1.45 var(--serif);color:var(--ink);margin:36px 0 12px}.answer{margin-top:0}.metric-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));border-top:1px solid var(--line);border-left:1px solid var(--line);margin:28px 0}.metric{padding:24px;border-right:1px solid var(--line);border-bottom:1px solid var(--line)}.metric b{display:block;color:var(--blue);font-size:13px;letter-spacing:.05em;margin-bottom:11px}.metric p{font-size:13px;line-height:1.8;margin:0}.table-wrap{overflow-x:auto;margin:28px 0}table{width:100%;border-collapse:collapse;min-width:660px}th,td{border:1px solid var(--line);padding:15px 17px;text-align:left;vertical-align:top;font-size:13px;line-height:1.7}th{background:var(--paper);color:var(--blue)}td{color:#3d4964}.loop{display:grid;grid-template-columns:1fr auto 1fr auto 1fr;gap:10px;align-items:center;margin:30px 0;padding:25px;background:var(--blue);color:#fff}.loop span{border:1px solid rgba(255,255,255,.34);padding:16px;text-align:center;font-size:12px;line-height:1.6}.loop i{font-style:normal;color:#bcd0ff}.takeaway{margin-top:72px;border-top:1px solid var(--line);padding-top:35px}.takeaway h2{margin-top:0}.sources{margin-top:68px;padding-top:30px;border-top:1px solid var(--line)}.sources h2{font-size:28px;margin-top:0}.sources li{font-size:13px;line-height:1.7;margin:8px 0}.footer{border-top:1px solid var(--line);padding:30px 0 50px;color:var(--muted);font-size:11px}.footer .wrap{display:flex;justify-content:space-between;gap:20px}.footer a{color:var(--blue)}
+    @media(max-width:760px){.wrap{width:min(100% - 32px,1040px)}.hero{padding-top:60px}.hero h1{font-size:45px}.metric-grid{grid-template-columns:1fr}.loop{grid-template-columns:1fr}.loop i{transform:rotate(90deg);text-align:center}article p,article li{font-size:15px}.footer .wrap{display:block;line-height:2}}
+  </style>
+</head>
+<body>
+  <header class="wrap topbar"><a class="brand" href="../index.html">LumiPulse</a><a class="back" href="../index.html#blog">← 返回 Blog</a></header>
+  <main>
+    <section class="wrap hero">
+      <div class="eyebrow">AI for Games · 世界模型 · 阅读笔记 01</div>
+      <h1>游戏世界模型究竟应该输出什么？</h1>
+      <p class="dek">下一帧、状态、轨迹，还是可执行环境？读完 SIMA 2 与 Programmable World Model 后，我更关心一个世界能否记住规则、对象、资源、事件，以及行动造成的长期后果。</p>
+      <div class="meta"><span>2026 · 10 · 11</span><a href="https://eurekaleo.github.io/awesome-ai-for-games/" target="_blank" rel="noopener noreferrer">综述原文 ↗</a><a href="https://deepmind.google/blog/sima-2-an-agent-that-plays-reasons-and-learns-with-you-in-virtual-3d-worlds/" target="_blank" rel="noopener noreferrer">SIMA 2 ↗</a><a href="https://alaya-lab.github.io/pwm/" target="_blank" rel="noopener noreferrer">Programmable World Model ↗</a></div>
+    </section>
+    <figure class="wrap">
+      <div class="figure-frame"><img src="../assets/ai-for-games-overview.png" width="1368" height="819" alt="AI for Games 综述图：设计、开发维护、建模、测试评估、运行时生成以及行动六类研究角色围绕游戏形成闭环"></div>
+      <figcaption class="caption">“AI for Games in the Foundation Model Era” 的研究版图。图片来自该综述的公开项目页，著作权归原作者所有；这里作为阅读笔记配图使用。<a href="https://eurekaleo.github.io/awesome-ai-for-games/" target="_blank" rel="noopener noreferrer">查看来源 ↗</a></figcaption>
+    </figure>
+    <article>
+      <p class="lead">我的判断是：游戏世界模型的核心输出不该只是一段看起来真实的视频，而应是一个可被行动改变、可被查询和验证、还能供 Agent 比较不同未来的世界状态。视频可以是它的观察层，不能代替它的世界。</p>
+
+      <h2>SIMA 2 与 PWM，刚好位于闭环两侧</h2>
+      <p><a href="https://deepmind.google/blog/sima-2-an-agent-that-plays-reasons-and-learns-with-you-in-virtual-3d-worlds/" target="_blank" rel="noopener noreferrer">SIMA 2</a> 是一个从屏幕观察、通过键鼠行动的通用 Agent。它把 Gemini 的推理能力接到 3D 游戏中，强调跨游戏理解指令、执行长任务和自我改进。它证明了游戏可以作为具身智能的训练场，也暴露出规划端的问题：官方明确写到，它仍受很长任务、目标验证和短记忆限制。</p>
+      <p><a href="https://alaya-lab.github.io/pwm/" target="_blank" rel="noopener noreferrer">Programmable World Model</a> 处理的是环境端。它把“世界状态如何演化”与“画面如何生成”拆开：轻量引擎保存显式状态并执行规则，带状态的 3D 定向框把结果编译成视频模型的条件，视频模型负责渲染。这让离开镜头的对象、角色生命值、关系和已经发生的事件不必全压在像素历史里。</p>
+      <div class="note"><p><strong>这两篇不属于同一种模型。</strong> SIMA 2 是使用环境的行动者；PWM 是给行动者提供可执行世界的环境框架。真正有研究价值的连接，是让 Agent 的行动进入世界状态，让世界的后果再成为 Agent 的观察、记忆与下一步规划依据。</p></div>
+
+      <h2>三个维度，要用三组测试</h2>
+      <div class="metric-grid">
+        <section class="metric"><b>01 · 视觉真实性</b><p>看单帧质量、时间连续性、几何稳定、对象身份和动作响应是否自然。FVD、感知距离与人工成对偏好可以测“像不像”，但不能证明规则正确。</p></section>
+        <section class="metric"><b>02 · 机制正确性</b><p>固定初态，主动改变动作与条件，检查碰撞、伤害、资源消耗、事件触发和因果顺序是否符合规则。核心是干预后的状态转移，不是画面是否顺眼。</p></section>
+        <section class="metric"><b>03 · 持久状态一致性</b><p>把对象移出镜头再返回，跨长时间、存档恢复和多次交互检查身份、位置、库存、任务进度、资源耗尽与不可逆事件有没有被忘记或改写。</p></section>
+      </div>
+      <p>因此，最有用的评测不该把三者压成一个总分。视觉层可以报告视频质量；机制层报告状态转移准确率、约束违反率、事件触发的 precision/recall；持久性则报告随时间增长的矛盾率、状态存活率与回访漂移。如果有权威游戏引擎，还应直接比对 health、collision、inventory 和 event trace。</p>
+
+      <p class="question">1. “看起来真实”“规则正确”“状态长期一致”分别怎么测？</p>
+      <p class="answer"><strong>用独立测试集分别测。</strong> 视觉测试改变外观、镜头和光照；机制测试改变动作与规则条件，并保持外观尽量不变；持久性测试延长时间、遮挡对象、离开场景再回来。只有这样，才不会把漂亮画面误当成世界理解，也不会把一个短时正确的响应误当成长期一致。</p>
+
+      <h2>从视频到可执行环境，是四种不同承诺</h2>
+      <div class="table-wrap"><table><thead><tr><th>输出</th><th>能回答什么</th><th>主要缺口</th></tr></thead><tbody>
+        <tr><td>下一帧 / 视频</td><td>接下来大概会看到什么</td><td>隐藏状态不可查询，多个看似合理的未来未必符合规则</td></tr>
+        <tr><td>结构化状态</td><td>对象、属性、资源和关系怎样变化</td><td>需要定义状态变量，也要解决从状态到真实观察的落差</td></tr>
+        <tr><td>动作条件轨迹</td><td>执行一串动作后，状态与回报怎样演化</td><td>误差会沿规划时域累积，需要不确定性与校准</td></tr>
+        <tr><td>可执行环境</td><td>可以反事实干预、反复 rollout、验证规则并训练 Agent</td><td>构建成本高，规则覆盖和模型偏差仍需独立检查</td></tr>
+      </tbody></table></div>
+
+      <p class="question">2. 一个模型生成视频，和一个模型能支持 Agent 规划，有什么区别？</p>
+      <p class="answer">视频生成器主要学习“什么画面看起来可能发生”；规划模型必须回答“如果采取动作 A 而不是 B，会分别发生什么”。后者需要动作可控、反事实可比、奖励或任务变量可读、长时状态稳定，并对预测不确定性诚实。最直接的检验不是视频分数，而是接入同一个 Agent 后，任务成功率、样本效率或规划 regret 是否改善。</p>
+
+      <h2>哪些问题能迁移到机器人与物理仿真？</h2>
+      <p>真正可迁移的是闭环中的问题：部分可观测下维护 belief state，对象离开视野后的持续存在，主动感知，动作条件预测，接触与事件造成的离散状态变化，资源和安全约束，以及长任务中的记忆、失败恢复和信用分配。</p>
+      <p>但游戏不能抹平现实差异。游戏可以廉价重置，并常有精确状态和明确规则；机器人面对传感噪声、控制延迟、接触动力学、安全代价和不可逆操作；物理仿真还要求守恒、数值稳定、参数辨识与跨尺度外推。游戏更适合先研究闭环结构与评测方法，再逐步加入这些现实约束。</p>
+
+      <p class="question">3. 游戏环境的哪些问题可以迁移到机器人和物理仿真？</p>
+      <p class="answer"><strong>状态估计、因果干预、长时记忆、受约束规划和闭环误差可以迁移。</strong> 纯粹的画面逼真度迁移价值较弱；只有当视觉表征保留了接触、速度、物体身份、材料或资源等会改变行动结果的变量，它才开始成为机器人与物理世界模型的一部分。</p>
+
+      <h2>我会研究模型与环境之间的闭环</h2>
+      <p>只研究模型，很容易把问题缩成下一帧预测；只研究环境，又可能退回手工搭建。闭环把两者变成一个可检验的问题：Agent 提出行动，世界状态按规则演化，生成模型给出观察，验证器检查事实，Agent 再用这些后果规划。</p>
+      <div class="loop" aria-label="模型与环境闭环"><span>Agent<br>提出行动与计划</span><i>→</i><span>显式世界状态<br>执行规则与事件</span><i>→</i><span>观察与验证<br>渲染、反馈、再规划</span></div>
+      <p>具体的研究切口可以是：<strong>一种同时保存规则、对象、资源、事件和长期后果的混合表征，能否在跨场景干预后保持一致，并让 Agent 的长时规划更好？</strong> 这里可以把显式状态或物理引擎作为可查询的骨架，把学习模型用于感知、补全、动力学残差和生成式渲染。</p>
+
+      <p class="question">4. 更想研究模型、环境，还是模型与环境之间的闭环？</p>
+      <p class="answer"><strong>闭环。</strong> 这条线最贴近物理仿真、世界模型、具身智能与 AI4S 的交叉点，也能形成清楚的实验：先测模型是否保存事实，再测环境是否执行规则，最后测这些能力是否真的帮助 Agent 完成长任务。</p>
+
+      <section class="takeaway">
+        <h2>我想记住的研究判断</h2>
+        <p>世界模型不是“会继续画画的相机”。它应当保存一个可以被行动改变的世界：对象有身份，资源会消耗，事件有先后，规则会约束转移，已经发生的后果不会因为镜头移开而消失。视觉真实性决定我们是否愿意相信眼前的观察；机制正确性决定行动是否有意义；持久状态一致性决定这个世界是否真的存在于时间里。</p>
+      </section>
+
+      <section class="sources">
+        <h2>原文入口</h2>
+        <ul>
+          <li><a href="https://eurekaleo.github.io/awesome-ai-for-games/" target="_blank" rel="noopener noreferrer">AI for Games in the Foundation Model Era</a>：六类研究角色，以及视觉、机制、持久状态三维评测。</li>
+          <li><a href="https://deepmind.google/blog/sima-2-an-agent-that-plays-reasons-and-learns-with-you-in-virtual-3d-worlds/" target="_blank" rel="noopener noreferrer">SIMA 2</a>：从屏幕观察并通过键鼠行动的跨游戏通用 Agent。</li>
+          <li><a href="https://alaya-lab.github.io/pwm/" target="_blank" rel="noopener noreferrer">Programmable World Model</a>：显式状态执行器、状态条件与生成式渲染的分离。</li>
+          <li><a href="https://arxiv.org/abs/2609.10540" target="_blank" rel="noopener noreferrer">Programmable World Model technical report</a>：方法、CombatStateBench 与实验细节。</li>
+        </ul>
+      </section>
+    </article>
+  </main>
+  <footer class="footer"><div class="wrap"><span>© <span id="year"></span> LumiPulse · 光脉</span><a href="../index.html#blog">回到 Blog ↑</a></div></footer>
+  <script>document.querySelector('#year').textContent=new Date().getFullYear();</script>
+</body>
+</html>
