@@ -70,6 +70,17 @@ jobs:
           mkdir _site
           cp index.html paper-data.js paper.js site-content.js .nojekyll _site/
           cp -R assets blog _site/
+          node <<'NODE'
+          const fs = require('fs');
+          const crypto = require('crypto');
+          let html = fs.readFileSync('_site/index.html', 'utf8');
+          for (const filename of ['paper-data.js', 'paper.js', 'site-content.js']) {
+            const version = crypto.createHash('sha256').update(fs.readFileSync(`_site/${filename}`)).digest('hex').slice(0, 12);
+            const reference = new RegExp(`src="${filename.replace(/\./g, '\\.')}[^\"]*"`, 'g');
+            html = html.replace(reference, `src="${filename}?v=${version}"`);
+          }
+          fs.writeFileSync('_site/index.html', html);
+          NODE
       - name: Upload site
         uses: actions/upload-pages-artifact@v4
         with:
