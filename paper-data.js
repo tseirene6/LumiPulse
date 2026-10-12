@@ -5,13 +5,15 @@ window.LUMIPULSE_PAPER_LIBRARY = {
       "id": "multimodal-embodied",
       "name": "多模态大模型与具身智能",
       "caption": "MULTIMODAL / EMBODIED",
-      "description": "关注多模态理解与生成，以及模型如何感知、决策并在真实或模拟环境中行动。"
+      "description": "关注多模态理解与生成，以及模型如何感知、决策并在真实或模拟环境中行动。",
+      "readingGroup": "primary"
     },
     {
       "id": "physics-world-model",
       "name": "物理仿真与世界模型",
       "caption": "SIMULATION / WORLD MODELS",
-      "description": "关注物理过程的模拟、环境动力学的学习，以及对行动后果的预测。"
+      "description": "关注物理过程的模拟、环境动力学的学习，以及对行动后果的预测。",
+      "readingGroup": "primary"
     },
     {
       "id": "ai4s",
@@ -39,13 +41,50 @@ window.LUMIPULSE_PAPER_LIBRARY = {
           "id": "rsi-ai4ai",
           "name": "RSI（AI4AI）"
         }
-      ]
+      ],
+      "readingGroup": "primary"
     },
     {
       "id": "agent",
       "name": "Agent",
       "caption": "AGENTS / TOOL USE",
-      "description": "关注智能体如何调用工具、规划步骤、协作并完成任务。"
+      "description": "关注智能体如何调用工具、规划步骤、协作并完成任务。",
+      "readingGroup": "primary"
+    },
+    {
+      "id": "computer-vision",
+      "name": "计算机视觉",
+      "caption": "COMPUTER VISION",
+      "description": "关注视觉表征、图像理解、目标识别以及三维场景理解。",
+      "readingGroup": "explore"
+    },
+    {
+      "id": "generative-models",
+      "name": "生成模型",
+      "caption": "GENERATIVE MODELS",
+      "description": "关注生成模型的学习机制、生成过程与内容控制。",
+      "readingGroup": "explore"
+    },
+    {
+      "id": "large-language-models",
+      "name": "大语言模型",
+      "caption": "LARGE LANGUAGE MODELS",
+      "description": "关注语言模型的预训练、推理能力、对齐与能力评估。",
+      "readingGroup": "explore"
+    },
+    {
+      "id": "reinforcement-learning",
+      "name": "强化学习",
+      "caption": "REINFORCEMENT LEARNING",
+      "description": "关注智能体如何利用反馈学习决策、优化策略与长期收益。",
+      "readingGroup": "explore"
+    },
+    {
+      "id": "efficiency-systems",
+      "name": "效率与系统",
+      "caption": "EFFICIENCY / SYSTEMS",
+      "description": "关注训练与推理效率、计算资源、系统设计以及质量、延迟与成本之间的权衡。",
+      "readingGroup": "explore"
     }
   ],
   "papers": [
