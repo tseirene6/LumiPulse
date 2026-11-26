@@ -68,7 +68,7 @@ jobs:
       - name: Prepare site
         run: |
           mkdir _site
-          cp index.html paper-data.js paper.js site-content.js .nojekyll _site/
+          cp editorial.css index.html paper-data.js paper.js site-content.js .nojekyll _site/
           cp -R assets blog _site/
           node <<'NODE'
           const fs = require('fs');
